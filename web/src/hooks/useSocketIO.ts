@@ -7,7 +7,7 @@ export function useSocketIO(username: string) {
   const [socket, setSocket] = useState<Socket | null>(null)
 
   useEffect(() => {
-    const socket = socketIo(process.env.SERVER_URL ?? 'http://localhost:3333', {
+    const socket = socketIo('https://real-time-server-o0mi.onrender.com', {
       transports: ['websocket'],
     })
 
