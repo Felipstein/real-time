@@ -24,11 +24,15 @@ io.on('connection', (socket) => {
   socket.on('client@connected', (username) => {
     users.push({ username })
 
+    console.info(`${username} connected (${users.length} in total).`)
+
     io.emit('users@updated', users)
   })
 
   socket.on('client@disconnected', (username) => {
     users = users.filter((user) => user.username !== username)
+
+    console.info(`${username} disconnected. (${users.length} in total).`)
 
     io.emit('users@updated', users)
   })
