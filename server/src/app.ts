@@ -38,8 +38,6 @@ io.on('connection', (socket) => {
       user.username === cursorUpdated.username ? cursorUpdated : user,
     )
 
-    console.log(cursorUpdated)
-
     socket.emit('users@updated', users)
   })
 })
