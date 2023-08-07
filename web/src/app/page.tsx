@@ -1,40 +1,24 @@
-'use client'
+import { Content } from '@/components/Content'
+import { Header } from '@/components/Header'
+import { cookies } from 'next/dist/client/components/headers'
+import { redirect } from 'next/navigation'
 
-import { MousePointer2 } from 'lucide-react'
-import { MouseEvent, useEffect, useState } from 'react'
-import { io } from 'socket.io-client'
-
-const socket = io('http://localhost:3333')
-
-type Pos = { x: number; y: number }
+export const USERNAME_COOKIE_KEY = 'real-time.username'
 
 export default function Home() {
-  const [otherMouse, setOtherMouse] = useState<Pos | null>(null)
+  const cookiesStore = cookies()
 
-  useEffect(() => {
-    socket.on('mouse@client', (a) => {
-      setOtherMouse(a as Pos)
-    })
-  }, [])
+  const usernameCookie = cookiesStore.get(USERNAME_COOKIE_KEY)
 
-  function handleMouseMove(event: MouseEvent) {
-    const { clientX: x, clientY: y } = event
-
-    socket.emit('mouse@move', { x, y } as Pos)
+  if (!usernameCookie?.value) {
+    redirect('/login')
   }
 
   return (
-    <div className="h-full" onMouseMove={handleMouseMove}>
-      {otherMouse && (
-        <div
-          className="absolute"
-          style={{ top: otherMouse.y, left: otherMouse.x }}
-        >
-          <MousePointer2 className="h-5 w-5" />
-        </div>
-      )}
+    <div className="flex h-full flex-col">
+      <Header />
 
-      {!otherMouse && <span>No mouse</span>}
+      <Content username={usernameCookie.value} />
     </div>
   )
 }
