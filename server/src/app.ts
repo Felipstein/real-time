@@ -24,13 +24,13 @@ io.on('connection', (socket) => {
   socket.on('client@connected', (username) => {
     users.push({ username })
 
-    socket.emit('users@updated', users)
+    io.emit('users@updated', users)
   })
 
   socket.on('client@disconnected', (username) => {
     users = users.filter((user) => user.username !== username)
 
-    socket.emit('users@updated', users)
+    io.emit('users@updated', users)
   })
 
   socket.on('cursor-client@move', (cursorUpdated: CursorClient) => {
@@ -38,7 +38,7 @@ io.on('connection', (socket) => {
       user.username === cursorUpdated.username ? cursorUpdated : user,
     )
 
-    socket.emit('users@updated', users)
+    io.emit('users@updated', users)
   })
 })
 
